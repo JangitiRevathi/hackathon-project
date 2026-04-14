@@ -2,6 +2,10 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
+<<<<<<< HEAD
     <mapping directory="$PROJECT_DIR$/hackathon-project" vcs="Git" />
+=======
+    <mapping directory="$PROJECT_DIR$/backend/hackathon-project" vcs="Git" />
+>>>>>>> 01c0e9f (Resolved merge conflict and added inventory module)
   </component>
 </project>
