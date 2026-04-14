@@ -1,41 +1,33 @@
 package com.hackathon.backend.controller;
 
-import com.hackathon.backend.model.Order;
-import com.hackathon.backend.service.OrderService;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import com.hackathon.backend.dto.OrderRequest;
+import com.hackathon.backend.dto.OrderResponse;
+import com.hackathon.backend.service.OrderService;
 
 @RestController
-@RequestMapping("/orders")
+@RequestMapping("/api/orders")
+@CrossOrigin(origins = "*") // Critical for your React/UI connection
 public class OrderController {
 
     @Autowired
     private OrderService orderService;
 
-    // Create order
+    // Create order using the Logic in your Service
     @PostMapping
-    public Order createOrder(@RequestBody Order order) {
-        return orderService.saveOrder(order);
+    public OrderResponse createOrder(@RequestBody OrderRequest request) {
+        return orderService.placeOrder(request);
     }
 
-    // Get all orders
+    // Get all orders (Returning the DTO, not the Entity)
     @GetMapping
-    public List<Order> getAllOrders() {
+    public List<OrderResponse> getAllOrders() {
         return orderService.getAllOrders();
     }
 
-    // Get order by ID
-    @GetMapping("/{id}")
-    public Order getOrderById(@PathVariable Long id) {
-        return orderService.getOrderById(id);
-    }
-
-    // Delete order
-    @DeleteMapping("/{id}")
-    public String deleteOrder(@PathVariable Long id) {
-        orderService.deleteOrder(id);
-        return "Order deleted successfully";
-    }
+    // Note: I removed getById and delete for now because 
+    // your ServiceImpl currently only has placeOrder and getAllOrders.
 }

@@ -1,4 +1,13 @@
-package com.hackathon.backend.service.impl;
+package com.hackathon.backend.service.imp1;
+
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.hackathon.backend.dto.OrderRequest;
 import com.hackathon.backend.dto.OrderResponse;
@@ -8,14 +17,6 @@ import com.hackathon.backend.model.Order;
 import com.hackathon.backend.repository.MedicineRepository;
 import com.hackathon.backend.repository.OrderRepository;
 import com.hackathon.backend.service.OrderService;
-import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class OrderServiceImpl implements OrderService {
@@ -58,18 +59,31 @@ public class OrderServiceImpl implements OrderService {
 
     @Override
     public List<OrderResponse> getAllOrders() {
-        return orderRepository.findAll().stream().map(order -> {
-            String medName = medicineRepository.findById(order.getMedicineId())
-                    .map(Medicine::getName)
-                    .orElse("Unknown Medicine");
-            return convertToResponseDTO(order, medName);
-        }).collect(Collectors.toList());
-    }
+    return orderRepository.findAll().stream().map(order -> {
+        // Find the medicine name for each order to show on the dashboard
+        String medName = medicineRepository.findById(order.getMedicineId())
+                .map(Medicine::getName)
+                .orElse("Unknown Medicine");
+        
+        OrderResponse response = new OrderResponse();
+        BeanUtils.copyProperties(order, response);
+        response.setMedicineName(medName);
+        return response;
+    }).collect(Collectors.toList());
+}
 
     private OrderResponse convertToResponseDTO(Order order, String medicineName) {
         OrderResponse response = new OrderResponse();
         BeanUtils.copyProperties(order, response);
         response.setMedicineName(medicineName);
         return response;
+    }
+    // Add this to your OrderServiceImpl.java//
+    @Override
+    public void deleteOrder(Long id) {
+        if (!orderRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Order not found");
+        }
+        orderRepository.deleteById(id);
     }
 }

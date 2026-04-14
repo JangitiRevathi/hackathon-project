@@ -21,10 +21,7 @@ public class MedicineServiceImpl implements MedicineService {
 
     @Override
     public List<MedicineDTO> getAllMedicines() {
-        return medicineRepository.findAll()
-                .stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
+        return medicineRepository.findAll().stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     @Override
@@ -35,27 +32,30 @@ public class MedicineServiceImpl implements MedicineService {
     }
 
     @Override
-    public List<MedicineDTO> searchByName(String name) {
+    public MedicineDTO addMedicine(MedicineDTO medicineDTO) {
+        Medicine medicine = new Medicine();
+        BeanUtils.copyProperties(medicineDTO, medicine);
+        Medicine saved = medicineRepository.save(medicine);
+        return convertToDTO(saved);
+    }
+
+    // THIS METHOD NAME MUST MATCH THE INTERFACE EXACTLY
+    @Override
+    public List<MedicineDTO> searchMedicines(String name) {
         return medicineRepository.findByNameContainingIgnoreCase(name)
                 .stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    @Override
-    public MedicineDTO addMedicine(MedicineDTO medicineDTO) {
-        Medicine medicine = new Medicine();
-        BeanUtils.copyProperties(medicineDTO, medicine);
-        
-        Medicine savedMedicine = medicineRepository.save(medicine);
-        
-        return convertToDTO(savedMedicine);
-    }
-
-    // Helper method to keep code DRY (Don't Repeat Yourself)
     private MedicineDTO convertToDTO(Medicine medicine) {
-        MedicineDTO dto = new MedicineDTO();
-        BeanUtils.copyProperties(medicine, dto);
-        return dto;
+    MedicineDTO dto = new MedicineDTO();
+    BeanUtils.copyProperties(medicine, dto);
+    
+    // If category is null in DB, give it a default for the demo
+    if (dto.getCategory() == null) {
+        dto.setCategory("General"); 
     }
+    return dto;
+}
 }

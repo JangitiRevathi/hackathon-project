@@ -1,11 +1,12 @@
 package com.hackathon.backend.dto;
+
 import java.time.LocalDateTime;
 
 import lombok.Data;
 
 @Data
 public class OrderResponse {
-    private Long orderId;
+    private Long id; // Change 'orderId' to 'id'
     private String medicineName;
     private Integer quantity;
     private Double totalAmount;
