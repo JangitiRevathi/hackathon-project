@@ -15,13 +15,13 @@ public class InventoryController {
     @Autowired
     private InventoryService service;
 
-    // ✅ POST (CREATE)
+
     @PostMapping
     public Inventory addInventory(@RequestBody Inventory inventory) {
         return service.saveInventory(inventory);
     }
 
-    // ✅ GET
+
     @GetMapping("/{medicineId}")
     public Inventory getStock(@PathVariable Long medicineId) {
         return service.getStock(medicineId);
