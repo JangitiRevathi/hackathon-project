@@ -1,9 +1,15 @@
 package com.hackathon.backend.model;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import java.time.LocalDateTime;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name="orders")
@@ -15,12 +21,10 @@ public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank
-    private String customerName;
-    @NotBlank
-    private String medicineName;
-    @Min(1)
-    private int quantity;
-
-    private double totalPrice;
+    
+    private Long medicineId;
+    private Integer quantity;
+    private Double totalAmount;
+    private LocalDateTime orderDate;
+    private String status; // e.g., "PENDING", "COMPLETED"
 }
