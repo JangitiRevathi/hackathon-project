@@ -1,26 +1,33 @@
 package com.hackathon.backend.model;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import lombok.*;
+import java.time.LocalDateTime;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.Data;
 
 @Entity
 @Table(name="orders")
 @Data
-@NoArgsConstructor
-@AllArgsConstructor
 public class Order {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @NotBlank
-    private String customerName;
-    @NotBlank
-    private String medicineName;
-    @Min(1)
-    private int quantity;
+    
+    @Column(name = "medicine_id")
+    private Long medicineId;
 
-    private double totalPrice;
+    @Column(name = "total_amount")
+    private Double totalAmount;
+
+    @Column(name = "order_date")
+    private LocalDateTime orderDate;
+    
+    private Integer quantity;
+    private String status; // e.g., "PENDING", "COMPLETED"
 }

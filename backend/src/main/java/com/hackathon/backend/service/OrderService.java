@@ -1,35 +1,16 @@
 package com.hackathon.backend.service;
 
-import com.hackathon.backend.model.Order;
-import com.hackathon.backend.repository.OrderRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
+import com.hackathon.backend.dto.OrderRequest;
+import com.hackathon.backend.dto.OrderResponse;
 import java.util.List;
 
-@Service
-public class OrderService {
+public interface OrderService {
+    // 1. The "Brain" - handles stock and checkout
+    OrderResponse placeOrder(OrderRequest request);
 
-    @Autowired
-    private OrderRepository orderRepository;
+    // 2. The "Dashboard" - shows all orders for the pharmacist
+    List<OrderResponse> getAllOrders();
 
-    // Save Order
-    public Order saveOrder(Order order) {
-        return orderRepository.save(order);
-    }
-
-    // Get all orders
-    public List<Order> getAllOrders() {
-        return orderRepository.findAll();
-    }
-
-    // Get order by ID
-    public Order getOrderById(Long id) {
-        return orderRepository.findById(id).orElseThrow(() -> new RuntimeException("Order Not Found with id: " + id));
-    }
-
-    // Delete order
-    public void deleteOrder(Long id) {
-        orderRepository.deleteById(id);
-    }
+    // 3. The "Management" - for canceling/deleting
+    void deleteOrder(Long id);
 }
