@@ -36,7 +36,7 @@ public class SecurityConfig {
                     "/v3/api-docs/**",    // Allows the underlying JSON docs
                     "/swagger-ui.html"
                 ).permitAll()             // No login required for these!
-                .anyRequest().authenticated() // Everything else needs a login
+                .anyRequest().permitAll() // Everything else needs a login
             );
 
         return http.build();
